@@ -14,7 +14,8 @@
     <div class="container text-center">
         <div class="row">
 
-            <form class="row g-3">
+            <form class="row g-3" method="POST" action="/submit" enctype="multipart/form-data">
+                @csrf
                 <div class="col-auto">
                     <label for="staticEmail2" class="visually-hidden">Email</label>
                     <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Masukkan Angka">
@@ -29,16 +30,17 @@
             </form>
         </div>
         <div class="row mb-3">
-        <h3>Kemungkinan Pembayaran</h3>
+            <h3>Kemungkinan Pembayaran {{ $data['input'] ?? null }}</h3>
         </div>
         <div class="row text-center">
 
-            <div class="col-4"><h3><span class="badge text-bg-secondary">14.000</span></h3></div>
-            <div class="col-4"><h3><span class="badge text-bg-secondary">14.000</span></h3></div>
-            <div class="col-4"><h3><span class="badge text-bg-secondary">14.000</span></h3></div>
-            <div class="col-4"><h3><span class="badge text-bg-secondary">14.000</span></h3></div>
-            <div class="col-4"><h3><span class="badge text-bg-secondary">14.000</span></h3></div>
-
+            @if(isset($data['moneys']))
+            @foreach( $data['moneys'] as $val )
+            <div class="col-4">
+                <h3><span class="badge text-bg-secondary">{{ $val }}</span></h3>
+            </div>
+            @endforeach
+            @endif
         </div>
     </div>
 

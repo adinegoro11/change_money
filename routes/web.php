@@ -15,10 +15,10 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home.index');
-    Route::get('/about', 'about')->name('about');
+    Route::post('/submit', 'submit')->name('submit');
 });
