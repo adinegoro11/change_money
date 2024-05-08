@@ -20,11 +20,12 @@ class HomeController extends Controller
         ]);
 
         $moneys = str_replace(".", "", $form['money']);
-        // $this->paid($moneys);
+        $check = $this->paid($moneys);
 
         return view('home')->with('data', [
-            'moneys' => $this->paid($moneys),
-            'input' => $form['money'],
+            'moneys' => $check['moneys'],
+            'round_up' => number_format($check['round_up'], 2, ",", "."),
+            'input' => number_format($moneys, 2, ",", "."),
         ]);
     }
 
@@ -32,7 +33,12 @@ class HomeController extends Controller
     {
         $my_moneys = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
         // bulatkan nilai total ke angka terdekat
-        $new_total = ceil($total / 100) * 100;
+
+        if ($total <1000) {
+            $new_total = ceil($total / 100) * 100;
+        } else {
+            $new_total = $this->roundUpToAny($total);
+        }
 
         $coins = [];
         foreach ($my_moneys as $key => $value) {
@@ -48,10 +54,10 @@ class HomeController extends Controller
             $result[] = number_format($value, 2, ",", ".");
         }
 
-        // var_dump($new_total);
-        // print_r($result);
-        // dd($result);
-        return $result;
+        return [
+            'moneys' => $result,
+            'round_up' => $new_total,
+        ];
     }
 
     private function cetak($new_total = 0, $coins = [])
@@ -65,5 +71,10 @@ class HomeController extends Controller
             }
         }
         return $result;
+    }
+
+    private function roundUpToAny($n, $x = 500)
+    {
+        return intval(round(($n + $x / 2) / $x) * $x);
     }
 }
