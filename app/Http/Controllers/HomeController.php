@@ -34,7 +34,7 @@ class HomeController extends Controller
         $my_moneys = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
         // bulatkan nilai total ke angka terdekat
 
-        if ($total <1000) {
+        if ($total < 1000) {
             $new_total = ceil($total / 100) * 100;
         } else {
             $new_total = $this->roundUpToAny($total);
@@ -67,7 +67,7 @@ class HomeController extends Controller
             if ($new_total % $value == 0) {
                 $result[] = 'Bayar dengan ' . ($new_total / $value) . ' pecahan ' . $value;
             } else {
-                // $result[] = non_modulo($new_total, $coins);
+                // $result[] = $this->non_modulo($new_total, $coins);
             }
         }
         return $result;
@@ -76,5 +76,19 @@ class HomeController extends Controller
     private function roundUpToAny($n, $x = 500)
     {
         return intval(round(($n + $x / 2) / $x) * $x);
+    }
+
+    private function non_modulo($new_total, $coins)
+    {
+        $result = 'Bayar dengan ';
+        for ($i = 0; $i < count($coins); $i++) {
+            if ($new_total == 0) {
+                break;
+            }
+            $result .= floor($new_total / $coins[$i]) . ' pecahan ' . $coins[$i] . ',';
+            $new_total = $new_total % $coins[$i];
+        }
+        rtrim($result, ",");
+        return $result;
     }
 }
